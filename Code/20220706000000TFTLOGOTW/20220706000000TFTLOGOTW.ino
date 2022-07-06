@@ -1,6 +1,17 @@
 /*---------------------------------------ILI9341_DRIVER 320x240 2.2' TFT-----------------------------------------*/
 // https://blog.csdn.net/weixin_45488643/article/details/113702365
 
+/*
+  List of all U8g2 fonts:    https://github.com/olikraus/u8g2/wiki/fntlistall
+  TFT_eSPI library:          https://github.com/Bodmer/TFT_eSPI
+  U8g2_for_TFT_eSPI library: https://github.com/Bodmer/U8g2_for_TFT_eSPI
+  U8g2_Arduino library:      https://github.com/olikraus/U8g2_Arduino
+  https://downloads.arduino.cc/libraries/github.com/olikraus/U8g2-2.27.6.zip
+
+
+  
+*/
+
 #include <SPI.h>
 #include <TFT_eSPI.h> // Hardware-specific library
 #include <U8g2_for_TFT_eSPI.h>
