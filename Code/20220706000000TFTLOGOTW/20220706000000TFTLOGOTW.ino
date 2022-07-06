@@ -67,7 +67,7 @@ void setup()
   tft.pushImage(0, 0, 320, 240, SeaOtter);
   delay(2000);
   //
-  tft.fillScreen(TFT_BLACK);
+  tft.fillScreen(TFT_BLACK); // try to commit and see the result.
   tft.setCursor(5, 25, 2);
   tft.setTextColor(TFT_WHITE);
   tft.setTextFont(1);
