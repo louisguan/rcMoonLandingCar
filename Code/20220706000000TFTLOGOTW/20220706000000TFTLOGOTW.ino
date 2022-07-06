@@ -2,14 +2,24 @@
 // https://blog.csdn.net/weixin_45488643/article/details/113702365
 
 /*
-  List of all U8g2 fonts:    https://github.com/olikraus/u8g2/wiki/fntlistall
-  TFT_eSPI library:          https://github.com/Bodmer/TFT_eSPI
-  U8g2_for_TFT_eSPI library: https://github.com/Bodmer/U8g2_for_TFT_eSPI
-  U8g2_Arduino library:      https://github.com/olikraus/U8g2_Arduino
-  https://downloads.arduino.cc/libraries/github.com/olikraus/U8g2-2.27.6.zip
+   用u8g2函式庫建字庫，OLED顯中文: https://blog.jmaker.com.tw/chinese_oled/
+   List of all U8g2 fonts:    https://github.com/olikraus/u8g2/wiki/fntlistall
+   TFT_eSPI library:          https://github.com/Bodmer/TFT_eSPI
+   U8g2_for_TFT_eSPI library: https://github.com/Bodmer/U8g2_for_TFT_eSPI
+   U8g2_Arduino library:      https://github.com/olikraus/U8g2_Arduino
+   https://downloads.arduino.cc/libraries/github.com/olikraus/U8g2-2.27.6.zip
+*/
 
+/***
+   CMD
+  // cd ./\Documents\Arduino\libraries\U8g2-2.27.6\tools\font\bdfconv\
+  // bdfconv.exe -v ../bdf/unifont.bdf -b 0 -f 1 -M ../build/chinese1.map -d ../bdf/7x13.bdf -n u8g2_font_unifont -o u8g2_font_unifont.c
+  // C:\Users\Guan\Documents\Arduino\libraries\U8g2-2.27.6\tools\font\bdfconv
+  // C:\Users\Guan\Documents\Arduino\libraries\U8g2-2.27.6\tools\font\build
+***/
 
-
+/*
+ * https://www.ifreesite.com/unicode-ascii-ansi.htm
 */
 
 #include <SPI.h>
