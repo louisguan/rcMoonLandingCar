@@ -9,7 +9,7 @@
   https://downloads.arduino.cc/libraries/github.com/olikraus/U8g2-2.27.6.zip
 
 
-  
+
 */
 
 #include <SPI.h>
@@ -78,7 +78,7 @@ void setup()
   tft.pushImage(0, 0, 320, 240, SeaOtter);
   delay(2000);
   //
-  tft.fillScreen(TFT_BLACK); // try to commit and see the result.
+  //  tft.fillScreen(TFT_BLACK); // try to commit and see the result.
   tft.setCursor(5, 25, 2);
   tft.setTextColor(TFT_WHITE);
   tft.setTextFont(1);
@@ -95,11 +95,11 @@ void setup()
   u8f.drawGlyph(24, 10, 0x0e10a); // Right Arrow
   u8f.drawGlyph(36, 10, 0x0e24b); // full Battery
   //
-  u8f.setFont(u8g2_font_unifont_t_chinese1); // extended font
-  u8f.setFontMode(1); // use u8g2 transparent mode (this is default)
-  u8f.setCursor(0, 60); // start writing at this position
   //
   // UTF-8 string: "歡迎使用伴伴登肚小車"
+  u8f.setFont(u8g2_font_unifont_t_chinese1); // extended font
+  u8f.setFontMode(1); // use u8g2 transparent mode (this is default)
+  u8f.setCursor(95, 225); // start writing at this position
   String TW = "歡迎使用伴伴登肚小車";
   for (int i = 0; i < TW.length(); i++)
   {
