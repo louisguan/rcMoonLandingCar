@@ -22,9 +22,9 @@ String clientId = "ESP32Client-"; // Create a random client ID
 // #include <WiFi.h>
 PubSubClient client(espClient);
 //
-#define MQTT_SUB_Direction "esp32/Direction/Car001"
-#define MQTT_PUB_HandShake "esp32/init"
-#define MQTT_SUB_ACK "esp32/ack"
+char* MQTT_SUB_Direction = "esp32/Direction/Car001";
+char* MQTT_PUB_HandShake = "esp32/init";
+char* MQTT_SUB_ACK = "esp32/ack";
 
 /*---------------------------------------ILI9341_DRIVER 320x240 2.2' TFT-----------------------------------------*/
 // https://blog.csdn.net/weixin_45488643/article/details/113702365
