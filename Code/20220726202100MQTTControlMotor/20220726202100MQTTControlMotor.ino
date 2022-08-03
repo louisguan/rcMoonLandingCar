@@ -35,9 +35,9 @@ Adafruit_PWMServoDriver pwm0 = Adafruit_PWMServoDriver(); // called this way, it
 //Adafruit_PWMServoDriver pwm1 = Adafruit_PWMServoDriver(0x41); // you can also call it with a different address you want
 //Adafruit_PWMServoDriver pwm2 = Adafruit_PWMServoDriver(0x42); // you can also call it with a different address you want
 //
-#define L9110sFreq 1000
-#define pwm1Freq 1000
-#define pwm2Freq 1000
+#define L9110sFreq 1600
+#define pwm1Freq 1600
+#define pwm2Freq 1600
 
 /*---------------------------------------ILI9341_DRIVER 320x240 2.2' TFT-----------------------------------------*/
 // https://blog.csdn.net/weixin_45488643/article/details/113702365
@@ -86,6 +86,8 @@ unsigned int colour = TFT_SKYBLUE; // Font Color
 long lastMsg = 0;
 //
 #define TRIGGER_PIN 0
+
+#define DevicePSWD "0989839679"
 
 /*---------------------------------------MQTT CallBack-----------------------------------------*/
 String CMD = "";
@@ -251,6 +253,13 @@ void setup()
   //  pwm1.begin();
   //  pwm1.setPWMFreq(pwm2Freq);  // This is the maximum PWM frequency
 
+#ifdef TWBR
+  // save I2C bitrate
+  uint8_t twbrbackup = TWBR;
+  // must be changed after calling Wire.begin() (inside pwm.begin())
+  TWBR = 12; // upgrade to 400KHz!
+#endif
+  SW();
 }
 
 void loop()
@@ -281,31 +290,31 @@ void loop()
     {
       case 0:
         FW(SPEED);
-        //        MODE = 4;
+        MODE = 4;
         Serial.println("往前");
         break;
 
       case 1:
         BW(SPEED);
-        //        MODE = 4;
+        MODE = 4;
         Serial.println("往後");
         break;
 
       case 2:
         LW(SPEED);
-        //        MODE = 4;
+        MODE = 4;
         Serial.println("往左");
         break;
 
       case 3:
         RW(SPEED);
-        //        MODE = 4;
+        MODE = 4;
         Serial.println("往右");
         break;
 
       case 4:
         SW();
-        //        MODE = 4;
+        MODE = 4;
         Serial.println("停止");
         break;
 
@@ -467,6 +476,7 @@ char* toCharArray(String str)
   return &str[0];
 }
 
+#define PWMSPEED 100
 void FW(int SPEED)
 {
   // 前
@@ -479,7 +489,7 @@ void FW(int SPEED)
   pwm0.setPWM(6, abs(SPEED), 4095 - abs(SPEED)); // M1B
   pwm0.setPWM(7, 0, 4095); // M1A
   //  Serial.println("FW");
-  delay(5);
+  delay(PWMSPEED);
 }
 
 void BW(int SPEED)
@@ -495,7 +505,7 @@ void BW(int SPEED)
   pwm0.setPWM(7, abs(SPEED), 4095 - abs(SPEED)); // M1A
   //  Serial.println("BW");
   //  BWlight(abs(SPEED / 16));
-  delay(5);
+  delay(PWMSPEED);
 }
 
 void LW(int SPEED)
@@ -510,7 +520,7 @@ void LW(int SPEED)
   pwm0.setPWM(6, abs(SPEED), 4095 - abs(SPEED)); // M1B
   pwm0.setPWM(7, 0, 4095); // M1A
 
-  delay(5);
+  delay(PWMSPEED);
 }
 
 void RW(int SPEED)
@@ -525,7 +535,7 @@ void RW(int SPEED)
   pwm0.setPWM(6, 0, 4095); // M1B
   pwm0.setPWM(7, abs(SPEED), 4095 - abs(SPEED)); // M1A
 
-  delay(5);
+  delay(PWMSPEED);
 }
 
 void SRW(int SPEED)
@@ -540,7 +550,7 @@ void SRW(int SPEED)
   pwm0.setPWM(6, 0, 4095); // M1B
   pwm0.setPWM(7, abs(SPEED), 4095 - abs(SPEED)); // M1A
 
-  delay(5);
+  delay(PWMSPEED);
 }
 
 void SLW(int SPEED)
@@ -555,7 +565,7 @@ void SLW(int SPEED)
   pwm0.setPWM(6, abs(SPEED), 4095 - abs(SPEED)); // M1B
   pwm0.setPWM(7, 0, 4095); // M1A
 
-  delay(5);
+  delay(PWMSPEED);
 }
 
 void LFW(int SPEED)
@@ -570,7 +580,7 @@ void LFW(int SPEED)
   pwm0.setPWM(6, abs(SPEED), 4095 - abs(SPEED)); // M1B
   pwm0.setPWM(7, 0, 4095); // M1A
 
-  delay(5);
+  delay(PWMSPEED);
 }
 
 void LBW(int SPEED)
@@ -585,7 +595,7 @@ void LBW(int SPEED)
   pwm0.setPWM(6, 0, 4095); // M1B
   pwm0.setPWM(7, 0, 4095); // M1A
 
-  delay(5);
+  delay(PWMSPEED);
 }
 
 void RFW(int SPEED)
@@ -600,7 +610,7 @@ void RFW(int SPEED)
   pwm0.setPWM(6, 0, 4095); // M1B
   pwm0.setPWM(7, 0, 4095); // M1A
 
-  delay(5);
+  delay(PWMSPEED);
 }
 
 void RBW(int SPEED)
@@ -615,7 +625,7 @@ void RBW(int SPEED)
   pwm0.setPWM(6, 0, 4095); // M1B
   pwm0.setPWM(7, abs(SPEED), 4095 - abs(SPEED)); // M1A
 
-  delay(5);
+  delay(PWMSPEED);
 }
 
 void SW()
@@ -631,6 +641,6 @@ void SW()
   pwm0.setPWM(7, 0, 4095); // M1A
   //  LightAllOff();
 
-  delay(5);
+  delay(PWMSPEED);
   Serial.println("STOP");
 }
