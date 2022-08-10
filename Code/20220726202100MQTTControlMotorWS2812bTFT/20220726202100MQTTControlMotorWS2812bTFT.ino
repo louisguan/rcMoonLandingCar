@@ -260,6 +260,21 @@ void setup()
   TWBR = 12; // upgrade to 400KHz!
 #endif
   SW();
+
+  tft.setRotation(RotationDisplay);
+  tft.fillScreen(TFT_WHITE);
+  tft.setSwapBytes(true); // pushImage is used for 16-bit sprites, the effect of swap bytes is reversed
+  tft.pushImage(0, 0, 320, 240, _FW);
+  delay(1000);
+  tft.pushImage(0, 0, 320, 240, _BW);
+  delay(1000);
+  tft.pushImage(0, 0, 320, 240, _LW);
+  delay(1000);
+  tft.pushImage(0, 0, 320, 240, _RW);
+  delay(1000);
+  tft.pushImage(0, 0, 320, 240, _SW);
+  delay(1000);
+  tft.fillScreen(TFT_WHITE);
 }
 
 void loop()
@@ -489,7 +504,13 @@ void FW(int SPEED)
   pwm0.setPWM(6, abs(SPEED), 4095 - abs(SPEED)); // M1B
   pwm0.setPWM(7, 0, 4095); // M1A
   //  Serial.println("FW");
+  //
+  tft.setRotation(RotationDisplay);
+  tft.fillScreen(TFT_WHITE);
+  tft.setSwapBytes(true); // pushImage is used for 16-bit sprites, the effect of swap bytes is reversed
+  tft.pushImage(0, 0, 320, 240, _FW);
   delay(PWMSPEED);
+  tft.fillScreen(TFT_WHITE);
 }
 
 void BW(int SPEED)
@@ -505,7 +526,13 @@ void BW(int SPEED)
   pwm0.setPWM(7, abs(SPEED), 4095 - abs(SPEED)); // M1A
   //  Serial.println("BW");
   //  BWlight(abs(SPEED / 16));
+  //
+  tft.setRotation(RotationDisplay);
+  tft.fillScreen(TFT_WHITE);
+  tft.setSwapBytes(true); // pushImage is used for 16-bit sprites, the effect of swap bytes is reversed
+  tft.pushImage(0, 0, 320, 240, _BW);
   delay(PWMSPEED);
+  tft.fillScreen(TFT_WHITE);
 }
 
 void LW(int SPEED)
@@ -520,7 +547,13 @@ void LW(int SPEED)
   pwm0.setPWM(6, abs(SPEED), 4095 - abs(SPEED)); // M1B
   pwm0.setPWM(7, 0, 4095); // M1A
 
+  //
+  tft.setRotation(RotationDisplay);
+  tft.fillScreen(TFT_WHITE);
+  tft.setSwapBytes(true); // pushImage is used for 16-bit sprites, the effect of swap bytes is reversed
+  tft.pushImage(0, 0, 320, 240, _LW);
   delay(PWMSPEED);
+  tft.fillScreen(TFT_WHITE);
 }
 
 void RW(int SPEED)
@@ -535,7 +568,13 @@ void RW(int SPEED)
   pwm0.setPWM(6, 0, 4095); // M1B
   pwm0.setPWM(7, abs(SPEED), 4095 - abs(SPEED)); // M1A
 
+  //
+  tft.setRotation(RotationDisplay);
+  tft.fillScreen(TFT_WHITE);
+  tft.setSwapBytes(true); // pushImage is used for 16-bit sprites, the effect of swap bytes is reversed
+  tft.pushImage(0, 0, 320, 240, _RW);
   delay(PWMSPEED);
+  tft.fillScreen(TFT_WHITE);
 }
 
 void SRW(int SPEED)
@@ -641,6 +680,11 @@ void SW()
   pwm0.setPWM(7, 0, 4095); // M1A
   //  LightAllOff();
 
+  //
+  tft.setRotation(RotationDisplay);
+  tft.fillScreen(TFT_WHITE);
+  tft.setSwapBytes(true); // pushImage is used for 16-bit sprites, the effect of swap bytes is reversed
+  tft.pushImage(0, 0, 320, 240, _SW);
   delay(PWMSPEED);
-  Serial.println("STOP");
+  //  tft.fillScreen(TFT_WHITE);
 }
