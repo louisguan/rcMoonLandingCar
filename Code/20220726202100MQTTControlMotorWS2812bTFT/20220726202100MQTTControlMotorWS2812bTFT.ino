@@ -26,6 +26,16 @@ char* MQTT_SUB_Direction = "esp32/Direction/Car001";
 char* MQTT_PUB_HandShake = "esp32/init";
 char* MQTT_SUB_ACK = "esp32/ack";
 
+/*---------------------------------------WS2812b-----------------------------------------*/
+// https://flaviocopes.com/rgb-color-codes/
+#include <FastLED.h>
+#define LedNum 11
+#define DataIn 15
+#define ColorOrder RGB
+#define ChipSet WS2812B
+int Brightness = 255;
+CRGB leds[LedNum];
+
 /*---------------------------------------PCA9685 PWM-----------------------------------------*/
 // https://www.itread01.com/content/1550066431.html
 #include <Wire.h>
@@ -182,7 +192,40 @@ void setup()
 {
   Serial.begin(115200);   // GPIO1, GPIO3 (TX/RX pin on ESP-12E Development Board)
   Serial.setDebugOutput(true); // 默認情況下，當調用Serial.begin後，將禁用WiFi庫的診斷輸出。要想再次啓動調試輸出，請調用
+  //
+  //
+  FastLED.addLeds<ChipSet, DataIn, ColorOrder>(leds, LedNum);
+  FastLED.setBrightness(Brightness);
+  FastLED.clear();
+  FastLED.show();
 
+  int RainBowLed[11][3] =
+  {
+    {220, 20, 60},
+    {220, 20, 60},
+    {255, 140, 0},
+    {255, 140, 0},
+    {255, 255, 0},
+    {255, 255, 0},
+    {34, 139, 34},
+    {64, 224, 208},
+    {25, 25, 112},
+    {138, 43, 226},
+    {138, 43, 226},
+  };
+
+  for (uint16_t i = 0; i < LedNum; i++)
+  {
+    leds[i] = CRGB(RainBowLed[i][0], RainBowLed[i][1], RainBowLed[i][2]);
+    delay(250);
+    FastLED.show();
+  }
+  delay(1000);
+
+  FastLED.clear();
+  FastLED.show();
+  //
+  //
   // setting PWM properties
 #define freq 5000
 #define ledChannel 0
@@ -275,6 +318,9 @@ void setup()
   tft.pushImage(0, 0, 320, 240, _SW);
   delay(1000);
   tft.fillScreen(TFT_WHITE);
+  //
+  //
+
 }
 
 void loop()
@@ -390,7 +436,16 @@ void WIFImanager()
 void WIFIreconnect()
 {
   WiFi.mode(WIFI_STA);
-  WIFImanager();
+  //
+  LedStrip(255, 102, 102, 50); // waiting for connnecting to the wifi
+  delay(500);
+  LightAllOff();
+  //
+  WIFImanager(); // connecting to the wifi
+  //
+  LedStrip(140, 255, 26, 50);  // sucessfully connected to the wifi
+  delay(500);
+  LightAllOff();
 }
 
 void checkButton()
@@ -433,6 +488,11 @@ void MQTTreconnect()
 {
   while (!client.connected())
   {
+    //
+    LedStrip(255, 204, 102, 50); // waiting for connnecting to the wifi
+    delay(250);
+    LightAllOff();
+    //
     Serial.println("Connecting to MQTT...");
     clientId += String(random(0xffff), HEX);
     if (client.connect(clientId.c_str(), mqttUser, mqttPassword))
@@ -442,6 +502,11 @@ void MQTTreconnect()
       client.publish(MQTT_PUB_HandShake, "I'm In~");
       // ... and resubscribe
       Serial.println(client.subscribe(MQTT_SUB_ACK));
+      //
+      //
+      LedStrip(26, 255, 178, 50);  // sucessfully connected to the wifi
+      delay(250);
+      LightAllOff();
     }
     else
     {
@@ -531,6 +596,7 @@ void BW(int SPEED)
   tft.fillScreen(TFT_WHITE);
   tft.setSwapBytes(true); // pushImage is used for 16-bit sprites, the effect of swap bytes is reversed
   tft.pushImage(0, 0, 320, 240, _BW);
+  BWlight(abs(SPEED / 16));
   delay(PWMSPEED);
   tft.fillScreen(TFT_WHITE);
 }
@@ -678,7 +744,7 @@ void SW()
   pwm0.setPWM(5, 0, 4095); // M3B
   pwm0.setPWM(6, 0, 4095); // M1B
   pwm0.setPWM(7, 0, 4095); // M1A
-  //  LightAllOff();
+  LightAllOff();
 
   //
   tft.setRotation(RotationDisplay);
@@ -687,4 +753,40 @@ void SW()
   tft.pushImage(0, 0, 320, 240, _SW);
   delay(PWMSPEED);
   //  tft.fillScreen(TFT_WHITE);
+}
+
+void FWlight(int SPEED)
+{
+  FastLED.setBrightness(SPEED);
+  leds[0] = CRGB(64, 224, 208);
+  leds[1] = CRGB(64, 224, 208);
+  leds[9] = CRGB(64, 224, 208);
+  leds[10] = CRGB(64, 224, 208);
+  FastLED.show();
+}
+
+void BWlight(int SPEED)
+{
+  FastLED.setBrightness(SPEED);
+  leds[2] = CRGB(220, 20, 60);
+  leds[3] = CRGB(220, 20, 60);
+  leds[4] = CRGB(220, 20, 60);
+  leds[5] = CRGB(220, 20, 60);
+  FastLED.show();
+}
+
+void LightAllOff()
+{
+  FastLED.clear();
+  FastLED.show();
+}
+
+void LedStrip(int red, int green, int blue, int BRI)
+{
+  FastLED.setBrightness(BRI);
+  for (int i = 0; i < LedNum; i++)
+  {
+    leds[i] = CRGB(red, green, blue);
+  }
+  FastLED.show();
 }
