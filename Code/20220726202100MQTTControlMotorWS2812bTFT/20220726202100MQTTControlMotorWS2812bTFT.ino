@@ -105,6 +105,9 @@ int SPEED = 0;
 #define TotalMode 5
 int MODE = 0;
 //
+int r, g, b, w;
+//
+//
 void callback(char* topic, byte* message, unsigned int length)
 {
   Serial.print("Message arrived on topic: ");
@@ -123,7 +126,23 @@ void callback(char* topic, byte* message, unsigned int length)
 
   // If a message is received on the topic esp32/output, you check if the message is either "on" or "off".
   // Changes the output state according to the message
-  if (String(topic) == MQTT_SUB_Direction)
+  if (messageTemp.substring(0, 1) == "#")
+  {
+    if (messageTemp.length() != 9) // search "rgb("
+    {
+      Serial.printf("invalid messageTemp: '%s'\n", messageTemp.c_str());
+      return;
+    }
+    long rgb = strtol(messageTemp.c_str() + 1, 0, 16); // parse as Hex, skipping the leading '#'
+    r = (rgb >> 24) & 0xFF;
+    g = (rgb >> 16) & 0xFF;
+    b = (rgb >> 8) & 0xFF;
+    w = rgb & 0xFF;
+    Serial.printf("r=%d, g=%d, b=%d, w=%d\n", r, g, b, w);
+    //
+    LedStrip(r, g, b, w);
+  }
+  else if (String(topic) == MQTT_SUB_Direction)
   {
     Serial.println(messageTemp);
     CMD = messageTemp.substring(0, 2);
@@ -744,7 +763,7 @@ void SW()
   pwm0.setPWM(5, 0, 4095); // M3B
   pwm0.setPWM(6, 0, 4095); // M1B
   pwm0.setPWM(7, 0, 4095); // M1A
-  LightAllOff();
+  //  LightAllOff();
 
   //
   tft.setRotation(RotationDisplay);
